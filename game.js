@@ -1,3 +1,4 @@
+let url = 'https://api.worldbank.org/v2/country/br?format=json'
 let randomCountryElement = document.querySelector('#random-country')
 let userAnswerElement = document.querySelector("#user-answer")
 let submitButton = document.querySelector("#submit-answer")
@@ -8,10 +9,32 @@ let resultTextElement = document.querySelector('#result')
 // Your browser treats all JavaScript files as one big file, o
 // organized in the order of the script tags so the countriesAndCodes array is available to this script.
 
-console.log(countriesAndCodes)  // You don't need to log countriesAndCodes - just proving it is available 
+function worldBank(){
+fetch(url)
+.then(res => res.join())
+.then(worldBankData => {
+    console.log(worldBankData)
+    data[1].forEach(element => {
+        resultTextElement.innerHTML = element.capitalCity;
+    })
+    .catch (err => {
+        console.log(err)
+    })
+    //console.log(worldBankData)
 
+})
+}
+for(let c = 0; c < countriesAndCodes.length; c++){
+    let country = countriesAndCodes[c]
+    console.log(country. capitalCity)
+}
+/*console.log(countriesAndCodes[0]);  // You don't need to log countriesAndCodes - just proving it is available 
+countriesAndCodes.forEach(function (name) {
+    console.log(name)
+})
 
 // TODO when the page loads, select an element at random from the countriesAndCodes array
+//countriesAndCodes
 
 // TODO display the country's name in the randomCountryElement 
 
