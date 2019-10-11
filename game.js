@@ -1,36 +1,81 @@
-let url = 'https://api.worldbank.org/v2/country/br?format=json'
+let url // 'https://api.worldbank.org/v2/country/br?format=json'// original link
+
 let randomCountryElement = document.querySelector('#random-country')
 let userAnswerElement = document.querySelector("#user-answer")
 let submitButton = document.querySelector("#submit-answer")
 let resultTextElement = document.querySelector('#result')
+let clrBtn = document.querySelector("#clir-answer")
+
 
 // TODO finish the script to challenge the user about their knowledge of capital cities.
 // An array of country codes is provided in the countries.js file. 
 // Your browser treats all JavaScript files as one big file, o
 // organized in the order of the script tags so the countriesAndCodes array is available to this script.
 
-function worldBank(){
-fetch(url)
-.then(res => res.join())
-.then(worldBankData => {
+function worldBank(){//creating function
+let browserUrl = getCCode();
+url= "https://api.worldbank.org/v2/country/"+browserUrl+"?format=json"
+fetch(url)//a function that takes API path as parameter
+.then(res => res.json())//convert json to readable format
+.then(worldBankData => {//content of the fetched data
     console.log(worldBankData)
-    data[1].forEach(element => {
-        resultTextElement.innerHTML = element.capitalCity;
+    worldBankData[1].forEach(element => {
+        resultTextElement.innerHTML = element.capitalCity
     })
+})
     .catch (err => {
-        console.log(err)
+       // console.log(err)
+        alert("ERROR!!!, DATA CANNOT BE FETCH, TRY AGAIN LATER")
+        
     })
     //console.log(worldBankData)
 
+}
+
+let newUrl
+let state = []// create an empty array
+let allCodes = []
+let eachCountry;//declare a variable to hold individual country
+function fetchCountries()//created a function to fetch individual country
+{
+    countriesAndCodes.forEach(function(el){//looping over CountryAndCode arry
+       //console.log(el.name); 
+       state.push(el.name)// it adds the countries into state array
+       allCodes.push(el["alpha-2"]); // it adds the codes into allCodes array
+    })
+    
+     eachCountry =state[Math.floor(Math.random() * state.length)] //randomizing the country names 
+     return eachCountry
+     //console.log(eachCountry)   
+}
+function getCCode()// function to get country code
+{
+    for(let i=0; i < state.length; i++) //loop
+    {
+        if(state[i].toUpperCase() === eachCountry.toUpperCase()) //loop and compare country
+        {
+            newUrl = allCodes[i].toLowerCase()// get corresponding code, change code to lower case
+        }
+    }
+        return newUrl; // url for next to get country capital
+}
+
+//window.onload=fetchCountries();
+window.addEventListener("load", function(){//window loading event
+    randomCountryElement.innerHTML = fetchCountries();//execute function to get country at random
+    resultTextElement.innerHTML = ""
+    getCCode(); //call function
 })
-}
-for(let c = 0; c < countriesAndCodes.length; c++){
-    let country = countriesAndCodes[c]
-    console.log(country. capitalCity)
-}
-/*console.log(countriesAndCodes[0]);  // You don't need to log countriesAndCodes - just proving it is available 
-countriesAndCodes.forEach(function (name) {
-    console.log(name)
+
+clrBtn.addEventListener("click", function(){
+    randomCountryElement.innerHTML = fetchCountries();//execute function to get country at random
+    resultTextElement.innerHTML = ""
+    userAnswerElement.value =""
+})
+
+
+submitButton.addEventListener("click", function(){
+    worldBank()
 })
 
 // TODO when the page loads, select an element at random from the countriesAndCodes array
@@ -51,6 +96,3 @@ countriesAndCodes.forEach(function (name) {
 //      For example "Correct! The capital of Germany is Berlin" or "Wrong - the capital of Germany is not G, it is Berlin"
 
 
-// TODO finally, connect the play again button. Clear the user's answer, select a new random country, 
-// display the country's name, handle the user's guess. If you didn't use functions in the code you've 
-// already written, you should refactor your code to use functions to avoid writing very similar code twice. 
